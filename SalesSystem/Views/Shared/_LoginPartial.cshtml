@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject ApplicationDbContext Context
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var name = "";
+        var id = UserManager.GetUserId(User);
+        var user = Context.TUsers.Where(u => u.IdUser.Equals(id)).ToList();
+        if (user.Count.Equals(0))
+        {
+            name = "PDHN";
+        }
+        else
+        {
+            name = $"{user[0].Name} {user[0].LastName}";
+        }
+
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hola @name!</a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Users" asp-controller="Users" asp-action="Logout">
+                <button type="submit" class="nav-link btn btn-link text-dark">Cerrar Sesión</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        @*<li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Users" asp-page="/Account/Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>*@
+    }
+</ul>
